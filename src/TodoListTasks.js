@@ -1,15 +1,29 @@
 import React, { Component } from 'react'
+import TodoListTask from "./TodoListTask";
 
 export default class TodoListTasks extends Component {
     render = () => {
+    let tasksElements = this.props.tasks.map(task =>  <TodoListTask title={task.title} isDone={task.isDone}  priority={task.priority} />)
         return (
             <div>
                 <div className="todoList-tasks">
-                    <div className="todoList-task">
-                        <input type="checkbox" checked={true}/>
-                        <span>CSS</span>
-                    </div>
-                    <div className="todoList-task">
+                    {tasksElements}
+                </div>
+            </div>
+        )
+    }
+}
+
+/*
+  <TodoListTask title={this.props.tasks[0].title} isDone={this.props.tasks[0].isDone} />
+                    <TodoListTask title={this.props.tasks[1].title} isDone={this.props.tasks[1].isDone} />
+                    <TodoListTask title={this.props.tasks[2].title} isDone={this.props.tasks[2].isDone}/>
+                    <TodoListTask title={this.props.tasks[3].title} isDone={this.props.tasks[3].isDone}/>
+                    <TodoListTask title={this.props.tasks[4].title} isDone={this.props.tasks[4].isDone}/>
+ */
+
+/*
+ <div className="todoList-task">
                         <input type="checkbox" checked={false}/>
                         <span>JS</span>
                     </div>
@@ -21,8 +35,4 @@ export default class TodoListTasks extends Component {
                         <input type="checkbox" checked={true}/>
                         <span>Patterns</span>
                     </div>
-                </div>
-            </div>
-        )
-    }
-}
+ */
