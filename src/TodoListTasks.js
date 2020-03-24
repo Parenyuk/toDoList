@@ -3,7 +3,8 @@ import TodoListTask from "./TodoListTask";
 
 export default class TodoListTasks extends Component {
     render = () => {
-    let tasksElements = this.props.tasks.map(task =>  <TodoListTask title={task.title} isDone={task.isDone}  priority={task.priority} />)
+        let tasksElements = this.props.tasks.map(task =>  <TodoListTask
+            changeStatus={this.props.changeStatus} task={task} />)
         return (
             <div>
                 <div className="todoList-tasks">
