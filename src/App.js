@@ -35,22 +35,7 @@ class App extends React.Component {
             tasks: newTasks
         })
     }
-    /*
-    onAddTaskClick = () => {
 
-         let newTitle = this.newTaskTitleRef.current.value;
-        this.newTaskTitleRef.current.value = '';
-
-
-
-
-
-    let newTasks = [...this.state.tasks, newTask]
-    this.setState({
-        tasks: newTasks
-    })
-}
-*/
     changeFilter = (newFilterValue) => {
         this.setState({
             filterValue: newFilterValue
@@ -101,21 +86,8 @@ class App extends React.Component {
                                        }
 
                                    })}/>
-                    {/*
-                        <TodoListTasks tasks={this.state.tasks.filter(t => {
-                            if (this.state.filterValue == 'All') {
-                                return true;
-                            }
-                            if (this.state.filterValue == 'Active') {
-                                return !t.isDone
-                            }
-                            if (this.state.filterValue == 'Completed') {
-                                return t.isDone
-                            }
-                        })}
-                        />
-                    */}
                     <TodoListFooter changeFilter={this.changeFilter}     filterValue={this.state.filterValue}/>
+
                 </div>
             </div>
         );

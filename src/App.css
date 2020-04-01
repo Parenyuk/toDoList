@@ -18,3 +18,7 @@
 .filter-active {
   background-color: green;
 }
+
+.error {
+  border-color: red;
+}
