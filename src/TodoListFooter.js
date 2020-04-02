@@ -6,13 +6,16 @@ export default class TodoListFooter extends Component {
         isHidden: true
     }
 
+    onAllFilterClick = () => {}
+    onCompletedFilterClick = () => {}
+    onActiveFilterClick = () => {}
+
     onShowFilterClick = () => {
         this.setState({isHidden: false})
     };
     onHideFilterClick = () => {
         this.setState({isHidden: true})
     };
-
 
     render = () => {
         let classForAll = this.props.filterValue === "All" ? "filter-active" : "";
@@ -21,6 +24,7 @@ export default class TodoListFooter extends Component {
 
         return (
             <div className="todoList-footer">
+                {!this.state.isHidden &&  <div>
                 <button className={classForAll}
                         onClick={() => {
                             this.props.changeFilter('All')
@@ -39,11 +43,17 @@ export default class TodoListFooter extends Component {
                         }}
                 >Active
                 </button>
-                {!this.state.isHidden && <span onClick={this.onHideFilterClick}>hide</span>}
-                {this.state.isHidden && <span onClick={this.onShowFilterClick}>show</span>}
+              </div>
+                }
+                { !this.state.isHidden &&    <span onClick={ this.onHideFilterClick }>hide</span> }
+                {  this.state.isHidden &&   <span onClick={  this.onShowFilterClick}>show</span> }
 
             </div>
 
         )
     }
 }
+/*
+ {!this.state.isHidden && <span onClick={this.onHideFilterClick}>hide</span>}
+                {this.state.isHidden && <span onClick={this.onShowFilterClick}>show</span>}
+ */
