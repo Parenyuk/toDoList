@@ -1,10 +1,11 @@
 .App {
-
+  display: flex;
+  flex-direction: row;
 }
 
 .todoList {
-  width: 500px;
-  margin: 0 auto;
+  width: 300px;
+  margin: 2vw 2vw;
 }
 
 .todoList > div {
@@ -24,4 +25,8 @@
 }
 .todoList-task.done {
   opacity: 0.5;
+}
+
+.add-task {
+  margin: 2vw 2vh;
 }
