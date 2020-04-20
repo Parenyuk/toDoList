@@ -6,6 +6,7 @@ export default class TodoListTasks extends Component {
         let tasksElements = this.props.tasks.map(task =>  <TodoListTask
             changeStatus={this.props.changeStatus} task={task}
             changeTitle={this.props.changeTitle}
+            key={task.id}
         />)
         return (
             <div>

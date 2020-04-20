@@ -13,7 +13,7 @@ export default class TodoListHeader extends Component {
         )
     }
 }
-export default TodoListHeader;
+
 /*
 this.state.error ? 'error' : '';
  let inputError =  this.state.error  ? 'error' : ''

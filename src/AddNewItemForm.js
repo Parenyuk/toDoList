@@ -1,27 +1,23 @@
-import React, {Component} from 'react';
+import React from 'react';
+import './App.css';
 
-
-class AddNewItemForm extends Component {
-
-
-    onAddItemClick = () => {
-        let newTitle = this.state.title;
-        this.setState({title: ''})
-        if (newTitle === "") {
-            this.setState({error: true})
-            // сетаем в стейт {error: true}
-        } else {
-            this.setState({error: false})
-            // сетаем в стейт {error: false}
-            // отправляем родителю название таски
-        }
-
-        this.props.addItem(newTitle);
-    };
-
+class AddNewItemForm extends React.Component {
     state = {
         error: false,
-        title: ''
+        title: ""
+    }
+
+    onAddItemClick = () => {
+        let newText = this.state.title;
+        this.setState({title: ""});
+
+        if (newText === "") {
+            this.setState({error: true});
+        } else {
+            this.setState({error: false});
+            // передаём новый текст наружу
+            this.props.addItem(newText);
+        }
     }
 
     onTitleChanged = (e) => {
@@ -32,30 +28,30 @@ class AddNewItemForm extends Component {
     }
 
     onKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            this.onAddTaskClick()
+        if (e.key === "Enter") {
+            this.onAddItemClick()
         }
     }
 
+
     render = () => {
         let classNameForInput = this.state.error ? "error" : "";
-        return (
-            <div className="todoList-newTaskForm">
-                <input type="text" placeholder="New item name"
-                       className={classNameForInput}
-                       onChange={this.onTitleChanged}
-                       onKeyPress={this.onKeyPress}
-                       value={this.state.title}
-                />
-                <button onClick={this.onAddItemClick}>Add</button>
-            </div>
 
-        )
+        return (
+
+                <div className="addNewItemForm">
+                    <input className={classNameForInput} type="text"
+                           placeholder="New item name"
+                           onChange={this.onTitleChanged}
+                           onKeyPress={this.onKeyPress}
+                           value={this.state.title}
+                    />
+                    <button onClick={this.onAddItemClick}>Add</button>
+                </div>
+
+        );
     }
 }
 
 export default AddNewItemForm;
-/*
-this.state.error ? 'error' : '';
- let inputError =  this.state.error  ? 'error' : ''
- */
+

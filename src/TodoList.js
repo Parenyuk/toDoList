@@ -1,135 +1,128 @@
-
 import React from 'react';
-
-import TodoListFooter from './TodoListFooter';
-import TodoListHeader from './TodoListHeader';
-import TodoListTasks from './TodoListTasks';
+import './App.css';
 import AddNewItemForm from "./AddNewItemForm";
+import TodoListTasks from "./TodoListTasks";
+import TodoListFooter from "./TodoListFooter";
+import TodoListTitle from "./TodoListTitle";
+
 
 class TodoList extends React.Component {
+
     constructor(props) {
         super(props);
-        this.newTaskTitleRef = React.createRef();
+        this.newTasksTitileRef = React.createRef();
 
     }
-    nextTaskId = 0;
 
     componentDidMount() {
         this.restoreState();
     }
 
-    state = {
-        tasks: [
-            // {id: 0,  title: 'JS', isDone: true, priority: "low" },
-            // {id: 1,  title: 'CSS', isDone: false, priority: "low" },
-            // {id: 2,  title: 'React', isDone: false, priority: "low"},
-            // {id: 3,  title: 'Redux', isDone: true, priority: "low"},
-            // {id: 4,  title: 'NodeJS', isDone: false,priority: "low"},
-            // {id: 5,  title: 'AngularJS', isDone: false, priority: "medium"}
-        ],
-        filterValue: 'All'
-    };
     saveState = () => {
-      localStorage.setItem('our-state-' + this.props.id, JSON.stringify(this.state))
+        // переводим объект в строку
+        let stateAsString = JSON.stringify(this.state);
+        // сохраняем нашу строку в localStorage под ключом "our-state"
+        localStorage.setItem("our-state-" + this.props.id, stateAsString);
     }
+
     restoreState = () => {
+        // объявляем наш стейт стартовый
         let state = {
             tasks: [],
-            filterValue: 'All'
-        }
-      let stateAsString =  localStorage.getItem('our-state-' + this.props.id )
-        if(stateAsString) {
+            filterValue: "All"
+        };
+
+        // считываем сохранённую ранее строку из localStorage
+        let stateAsString = localStorage.getItem("our-state-" + this.props.id);
+        // а вдруг ещё не было ни одного сохранения?? тогда будет null.
+        // если не null, тогда превращаем строку в объект
+        if (stateAsString != null) {
             state = JSON.parse(stateAsString);
         }
-      this.setState(state, ()=> {
-          this.state.tasks.forEach(task => {
-          if(task.id >= this.nextTaskId){
-              this.nextTaskId = task.id + 1;
-          }
-      })
-      })
+        // устанавливаем стейт (либо пустой, либо восстановленный) в стейт
+        this.setState(state, () => {
+            this.state.tasks.forEach(t => {
+                if (t.id >= this.nextTaskId) {
+                    this.nextTaskId = t.id + 1;
+                }
+            })
+        });
     }
 
+    nextTaskId = 0;
 
-    addTask = (newTitle) => {
+    state = {
+        tasks: [],
+        filterValue: "All"
+    };
+
+    addTask = (newText) => {
         let newTask = {
             id: this.nextTaskId,
-            title: newTitle,
-            isDone:  false,
+            title: newText,
+            isDone: false,
             priority: "low"
         };
+        // инкрементим (увеличим) id следующей таски, чтобы при следюущем добавлении, он был на 1 больше
         this.nextTaskId++;
-        let newTasks = [...this.state.tasks, newTask]
-        this.setState({
+        let newTasks = [...this.state.tasks, newTask];
+        this.setState( {
             tasks: newTasks
-        },  this.saveState)
+        }, () => { this.saveState(); });
 
     }
 
     changeFilter = (newFilterValue) => {
-        this.setState({
+        this.setState( {
             filterValue: newFilterValue
-        },  this.saveState)
+        }, () => { this.saveState(); });
     }
-    changeTask = (taskId, newPropsObj) => {
-        let newTasks = this.state.tasks.map( t => {
-            if (t.id !== taskId){
+
+    changeTask = (taskId, obj) => {
+        debugger
+        let newTasks = this.state.tasks.map(t => {
+            if (t.id != taskId) {
                 return t;
             }
             else {
-                return {...t, ...newPropsObj}
+                return {...t, ...obj};
             }
         });
+
         this.setState({
             tasks: newTasks
-        },  this.saveState)
+        }, () => { this.saveState(); });
     }
     changeStatus = (taskId, isDone) => {
-      this.changeTask(taskId, {isDone: isDone})
+        this.changeTask(taskId, {isDone: isDone});
     }
-
-    changeTitle = (taskId, newTitle) => {
-        this.changeTask(taskId, {title: newTitle})
+    changeTitle = (taskId, title) => {
+        this.changeTask(taskId, {title: title});
     }
-
 
     render = () => {
 
         return (
-            <div className="App">
                 <div className="todoList">
-                    <TodoListHeader title={this.props.title}/>
-                    <AddNewItemForm addItem={this.addTask} />
-                    {/*<TodoListHeader addTask={this.addTask} title={this.props.title} />*/}
-                    {/*/!**/}
-                    {/*    <div className="todoList-header">*/}
-                    {/*        <h3 className="todoList-header__title">What to Learn</h3>*/}
-                    {/*        <div className="todoList-newTaskForm">*/}
-                    {/*            <input ref={this.newTaskTitleRef} type="text" placeholder="New task name"/>*/}
-                    {/*            <button onClick={this.onAddTaskClick}>Add*/}
-                    {/*            </button>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/**!/*/}
-                    <TodoListTasks changeStatus={this.changeStatus}
-                                   changeTitle={this.changeTitle}
+                    <div className='todoList-header'>
+                        <TodoListTitle title={this.props.title} />
+                        <AddNewItemForm addItem={this.addTask} />
+                    </div>
+                    <TodoListTasks changeStatus={this.changeStatus }
+                                   changeTitle={this.changeTitle }
                                    tasks={this.state.tasks.filter(t => {
-                                       switch (this.state.filterValue) {
-                                           case "All":
-                                               return true;
-                                           case 'Active':
-                                               return !t.isDone;
-                                           case 'Completed':
-                                               return t.isDone;
-                                               break;
-
-                                       }
-
-                                   })}/>
-                    <TodoListFooter changeFilter={this.changeFilter}     filterValue={this.state.filterValue}/>
-
+                        if (this.state.filterValue === "All") {
+                            return true;
+                        }
+                        if (this.state.filterValue === "Active") {
+                            return t.isDone === false;
+                        }
+                        if (this.state.filterValue === "Completed") {
+                            return t.isDone === true;
+                        }
+                    })}/>
+                    <TodoListFooter changeFilter={this.changeFilter} filterValue={this.state.filterValue} />
                 </div>
-            </div>
         );
     }
 }
