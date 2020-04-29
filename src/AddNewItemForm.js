@@ -47,6 +47,7 @@ class AddNewItemForm extends React.Component {
                            value={this.state.title}
                     />
                     <button onClick={this.onAddItemClick}>Add</button>
+
                 </div>
 
         );
