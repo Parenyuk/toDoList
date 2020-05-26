@@ -1,56 +1,50 @@
-import React, {Component} from "react";
+import React from 'react';
+import './App.css';
 
-class TodoListTask extends Component {
+class TodoListTask extends React.Component {
+
+    onIsDoneChanged = (e) => {
+        let status = e.currentTarget.checked ? 2 : 0
+        this.props.changeStatus(this.props.task, status);
+    }
+
+    onTitleChanged = (e) => {
+        this.setState({title: e.currentTarget.value })
+
+    }
 
     state = {
         editMode: false,
+        title: this.props.task.title
     }
 
-    activatedEditMode = () => {
-        this.setState({
-            editMode: true
-        })
-}
-    deactivatedEditMode = () => {
-        this.setState({
-            editMode: false
-        })
-    }
-    onIsDoneChanged = (e) => {
-        this.props.changeStatus(this.props.task.id, e.currentTarget.checked )
-    }
-    onTitleChanged = (e) => {
-        this.props.changeTitle(this.props.task.id, e.currentTarget.value )
+    activateEditMode = () => {
+
+        this.setState({editMode: true});
     }
 
-    deleteTask = () => {
-        this.props.deleTask(this.props.task.id)
+    deactivateEditMode= () => {
+        this.props.changeTitle(this.props.task, this.state.title);
+        this.setState({editMode: false, title: ''});
+    }
+    onDeleteTask = () => {
+        this.props.deleteTask(this.props.task.id);
     }
     render = () => {
-        let taskClass = this.props.task.isDone
-            ? 'todoList-task done'
-            : 'todoList-task'
+        let statusTask = this.props.task.status;
+        let containerCssClass = statusTask === 2 ? "todoList-task done" : "todoList-task";
         return (
-            <div className={taskClass}>
-                <input type="checkbox" checked={this.props.task.id.isDone}
-                       onChange={this.onIsDoneChanged}
-                />
-                <span>{this.props.task.id} - </span>
-                {this.state.editMode
-                    ? <input
-                        value={this.props.task.title}
-                        autoFocus={true}
-                         onBlur={this.deactivatedEditMode}
-                        onChange={this.onTitleChanged}
-                    />
-                    :  <span onClick={this.activatedEditMode}>{this.props.task.title}: </span>
-                }
-                <span>priority {this.props.task.priority}</span>
-                <button onClick={this.deleteTask} >X</button>
+            <div className={containerCssClass}>
+                <input type="checkbox" checked={statusTask === 2}
+                       onChange={this.onIsDoneChanged}/>
+                { this.state.editMode
+                    ? <input onBlur={this.deactivateEditMode} onChange={this.onTitleChanged} autoFocus={true} value={this.state.title} />
+                    : <span onClick={this.activateEditMode}>{this.props.task.id} - {this.props.task.title}</span>
+                }, priority: {this.props.task.priority} <button onClick={this.onDeleteTask}>X</button>
             </div>
-                )
+        );
     }
 }
 
-
 export default TodoListTask;
+
